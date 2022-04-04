@@ -35,6 +35,8 @@ module.exports = {
           ephemeral: true
         });
 
+        let closed = false;
+
         const embed = new client.discord.MessageEmbed()
           .setColor('6d6ee8')
           .setAuthor({ name: `${interaction.user.username}'s Ticket`, iconURL: 'https://cdn.discordapp.com/attachments/938230861323727008/960379663497187348/unknown.png' })
@@ -110,6 +112,7 @@ module.exports = {
         });
 
         collector.on('end', collected => {
+          closed = true;
           if (collected.size < 1) {
             c.send(`No category selected. Closing the ticket...`).then(() => {
               setTimeout(() => {
@@ -150,7 +153,10 @@ module.exports = {
       });
 
       collector.on('collect', i => {
+
+
         if (i.customId == 'confirm-close') {
+
           interaction.editReply({
             content: `Ticket closed by <@!${interaction.user.id}>`,
             components: []
@@ -196,7 +202,9 @@ module.exports = {
             });
 
           collector.stop();
-        };
+
+        }
+
         if (i.customId == 'no') {
           interaction.editReply({
             content: 'Aborting closure!',
@@ -219,6 +227,9 @@ module.exports = {
     if (interaction.customId == "delete-ticket") {
       const guild = client.guilds.cache.get(interaction.guildId);
       const chan = guild.channels.cache.get(interaction.channelId);
+
+
+
 
       interaction.reply({
         content: 'Saving Messages...'
@@ -250,10 +261,13 @@ module.exports = {
         }).catch(() => console.log("Ticket log channel not found."));
         chan.send('Deleting channel...');
 
+        console.log(chan.name);
+
         setTimeout(() => {
           chan.delete();
         }, 5000);
       });
+
     };
   },
 };
