@@ -1,5 +1,7 @@
 const { getPasteUrl, PrivateBinClient } = require('@agc93/privatebin');
 
+const uploadPaste = require('../utils/upload');
+
 module.exports = {
   name: 'interactionCreate',
   async execute(interaction, client) {
@@ -119,7 +121,7 @@ module.exports = {
                 if (c.deletable) {
                   c.delete();
                 };
-              }, 5000);
+              }, 1);
             });
           };
         });
@@ -240,18 +242,18 @@ module.exports = {
           `${new Date(m.createdTimestamp).toLocaleString('en-EN')} - ${m.author.username}#${m.author.discriminator}: ${m.attachments.size > 0 ? m.attachments.first().proxyURL : m.content}`
         ).reverse().join('\n');
         if (a.length < 1) a = "Nothing"
-        var paste = new PrivateBinClient("https://privatebin.net/");
-        var result = await paste.uploadContent(a, { uploadFormat: 'markdown' })
+        const result = a;
+        const paste = await uploadPaste(a)
         const embed = new client.discord.MessageEmbed()
           .setAuthor({ name: 'Ticket Logs', iconURL: 'https://cdn.discordapp.com/attachments/938230861323727008/960379663497187348/unknown.png' })
-          .setDescription(`📰 Logs for ticket \`${chan.id}\` | created by <@!${chan.topic}> | closed by <@!${interaction.user.id}>\n\nLogs: [**Click here to see the logs**](${getPasteUrl(result)})`)
+          .setDescription(`📰 Logs for ticket \`${chan.id}\` | created by <@!${chan.topic}> | closed by <@!${interaction.user.id}>\n\nLogs: [**Click here to see the logs**](${paste})`)
           .setColor('2f3136')
           .setFooter({ text: "Note: logs will be deleted in 24 hours." })
           .setTimestamp();
 
         const embed2 = new client.discord.MessageEmbed()
           .setAuthor({ name: 'Ticket Logs', iconURL: 'https://cdn.discordapp.com/attachments/938230861323727008/960379663497187348/unknown.png' })
-          .setDescription(`📰 Logs for ticket \`${chan.id}\`: [**Click here to see the logs**](${getPasteUrl(result)})`)
+          .setDescription(`📰 Logs for ticket \`${chan.id}\`: [**Click here to see the logs**](${paste})`)
           .setColor('2f3136')
           .setFooter({ text: "This log will be deleted in 24 hrs!" })
           .setTimestamp();
@@ -261,11 +263,9 @@ module.exports = {
         }).catch(() => console.log("Ticket log channel not found."));
         chan.send('Deleting channel...');
 
-        console.log(chan.name);
-
         setTimeout(() => {
           chan.delete();
-        }, 5000);
+        }, 1);
       });
 
     };
