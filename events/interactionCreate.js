@@ -16,17 +16,17 @@ module.exports = {
         parent: client.config.parentOpened,
         topic: interaction.user.id,
         permissionOverwrites: [{
-            id: interaction.user.id,
-            allow: ['SEND_MESSAGES', 'VIEW_CHANNEL'],
-          },
-          {
-            id: client.config.roleSupport,
-            allow: ['SEND_MESSAGES', 'VIEW_CHANNEL'],
-          },
-          {
-            id: interaction.guild.roles.everyone,
-            deny: ['VIEW_CHANNEL'],
-          },
+          id: interaction.user.id,
+          allow: ['SEND_MESSAGES', 'VIEW_CHANNEL'],
+        },
+        {
+          id: client.config.roleSupport,
+          allow: ['SEND_MESSAGES', 'VIEW_CHANNEL'],
+        },
+        {
+          id: interaction.guild.roles.everyone,
+          deny: ['VIEW_CHANNEL'],
+        },
         ],
         type: "GUILD_TEXT",
       }).then(async c => {
@@ -37,20 +37,20 @@ module.exports = {
 
         const embed = new client.discord.MessageEmbed()
           .setColor('6d6ee8')
-          .setAuthor({name: `${interaction.user.username}'s Ticket`, iconURL: 'https://i.imgur.com/oO5ZSRK.png'})
+          .setAuthor({ name: `${interaction.user.username}'s Ticket`, iconURL: 'https://cdn.discordapp.com/attachments/938230861323727008/960379663497187348/unknown.png' })
           .setDescription('Select the category of your ticket')
-          .setFooter({text: `${client.user.tag} || github.com/blackknight683`, iconURL: client.user.displayAvatarURL()})
+          .setFooter({ text: `${client.user.tag}`, iconURL: client.user.displayAvatarURL() })
           .setTimestamp();
 
         const row = new client.discord.MessageActionRow()
           .addComponents(
             new client.discord.MessageSelectMenu()
-            .setCustomId('category')
-            .setPlaceholder('Select the category of the ticket')
-            .addOptions([{
+              .setCustomId('category')
+              .setPlaceholder('Select the category of the ticket')
+              .addOptions([{
                 label: client.config.Category1,
                 value: client.config.Category1,
-                emoji: '💸',
+                emoji: '🙍',
               },
               {
                 label: client.config.Category2,
@@ -62,7 +62,7 @@ module.exports = {
                 value: client.config.Category3,
                 emoji: '🤖',
               },
-            ]),
+              ]),
           );
 
         msg = await c.send({
@@ -82,18 +82,17 @@ module.exports = {
               msg.delete().then(async () => {
                 const embed = new client.discord.MessageEmbed()
                   .setColor('6d6ee8')
-                  .setAuthor({name: 'Ticket', iconURL: interaction.user.displayAvatarURL()})
-                  .setDescription(`<@!${interaction.user.id}> Created a ticket with issues regarding \`${i.values[0]}\``)
-                  .setFooter({text: `${client.user.tag} || github.com/blackknight683`, iconURL: client.user.displayAvatarURL()})
+                  .setAuthor({ name: 'Ticket', iconURL: interaction.user.displayAvatarURL() })
+                  .setDescription(`<@!${interaction.user.id}> Created a ticket regarding \`${i.values[0]}\``)
                   .setTimestamp();
 
                 const row = new client.discord.MessageActionRow()
                   .addComponents(
                     new client.discord.MessageButton()
-                    .setCustomId('close-ticket')
-                    .setLabel('close')
-                    .setEmoji('✖')
-                    .setStyle('DANGER'),
+                      .setCustomId('close-ticket')
+                      .setLabel('Close')
+                      .setEmoji('✖')
+                      .setStyle('DANGER'),
                   );
 
                 const opened = await c.send({
@@ -131,13 +130,13 @@ module.exports = {
       const row = new client.discord.MessageActionRow()
         .addComponents(
           new client.discord.MessageButton()
-          .setCustomId('confirm-close')
-          .setLabel('Close')
-          .setStyle('DANGER'),
+            .setCustomId('confirm-close')
+            .setLabel('Close')
+            .setStyle('DANGER'),
           new client.discord.MessageButton()
-          .setCustomId('no')
-          .setLabel('Cancel')
-          .setStyle('SECONDARY'),
+            .setCustomId('no')
+            .setLabel('Cancel')
+            .setStyle('SECONDARY'),
         );
 
       const verif = await interaction.reply({
@@ -158,37 +157,36 @@ module.exports = {
           });
 
           chan.edit({
-              name: `closed-${chan.name}`,
-              permissionOverwrites: [
-                {
-                  id: client.users.cache.get(chan.topic),
-                  deny: ['SEND_MESSAGES', 'VIEW_CHANNEL'],
-                },
-                {
-                  id: client.config.roleSupport,
-                  allow: ['SEND_MESSAGES', 'VIEW_CHANNEL'],
-                },
-                {
-                  id: interaction.guild.roles.everyone,
-                  deny: ['VIEW_CHANNEL'],
-                },
-              ],
-            })
+            name: `closed-${chan.name}`,
+            permissionOverwrites: [
+              {
+                id: client.users.cache.get(chan.topic),
+                deny: ['SEND_MESSAGES', 'VIEW_CHANNEL'],
+              },
+              {
+                id: client.config.roleSupport,
+                allow: ['SEND_MESSAGES', 'VIEW_CHANNEL'],
+              },
+              {
+                id: interaction.guild.roles.everyone,
+                deny: ['VIEW_CHANNEL'],
+              },
+            ],
+          })
             .then(async () => {
               const embed = new client.discord.MessageEmbed()
                 .setColor('6d6ee8')
-                .setAuthor({name: 'Ticket', iconURL: 'https://i.imgur.com/oO5ZSRK.png'})
+                .setAuthor({ name: 'Ticket', iconURL: 'https://cdn.discordapp.com/attachments/938230861323727008/960379663497187348/unknown.png' })
                 .setDescription('```Ticket Summary```')
-                .setFooter({text: `${client.user.tag} || github.com/blackknight683`, iconURL: client.user.displayAvatarURL()})
                 .setTimestamp();
 
               const row = new client.discord.MessageActionRow()
                 .addComponents(
                   new client.discord.MessageButton()
-                  .setCustomId('delete-ticket')
-                  .setLabel('Delete')
-                  .setEmoji('🗑️')
-                  .setStyle('DANGER'),
+                    .setCustomId('delete-ticket')
+                    .setLabel('Delete')
+                    .setEmoji('🗑️')
+                    .setStyle('DANGER'),
                 );
 
               chan.send({
@@ -232,30 +230,30 @@ module.exports = {
         ).reverse().join('\n');
         if (a.length < 1) a = "Nothing"
         var paste = new PrivateBinClient("https://privatebin.net/");
-        var result = await paste.uploadContent(a, {uploadFormat: 'markdown'})
-            const embed = new client.discord.MessageEmbed()
-              .setAuthor({name: 'Ticket Logs', iconURL: 'https://i.imgur.com/oO5ZSRK.png'})
-              .setDescription(`📰 Logs for ticket \`${chan.id}\` | created by <@!${chan.topic}> | closed by <@!${interaction.user.id}>\n\nLogs: [**Click here to see the logs**](${getPasteUrl(result)})`)
-              .setColor('2f3136')
-              .setFooter({text: "This log will be deleted in 24 hrs!"})
-              .setTimestamp();
+        var result = await paste.uploadContent(a, { uploadFormat: 'markdown' })
+        const embed = new client.discord.MessageEmbed()
+          .setAuthor({ name: 'Ticket Logs', iconURL: 'https://cdn.discordapp.com/attachments/938230861323727008/960379663497187348/unknown.png' })
+          .setDescription(`📰 Logs for ticket \`${chan.id}\` | created by <@!${chan.topic}> | closed by <@!${interaction.user.id}>\n\nLogs: [**Click here to see the logs**](${getPasteUrl(result)})`)
+          .setColor('2f3136')
+          .setFooter({ text: "Note: logs will be deleted in 24 hours." })
+          .setTimestamp();
 
-            const embed2 = new client.discord.MessageEmbed()
-              .setAuthor({name: 'Ticket Logs', iconURL: 'https://i.imgur.com/oO5ZSRK.png'})
-              .setDescription(`📰 Logs for ticket \`${chan.id}\`: [**Click here to see the logs**](${getPasteUrl(result)})`)
-              .setColor('2f3136')
-              .setFooter({text: "This log will be deleted in 24 hrs!"})
-              .setTimestamp();
+        const embed2 = new client.discord.MessageEmbed()
+          .setAuthor({ name: 'Ticket Logs', iconURL: 'https://cdn.discordapp.com/attachments/938230861323727008/960379663497187348/unknown.png' })
+          .setDescription(`📰 Logs for ticket \`${chan.id}\`: [**Click here to see the logs**](${getPasteUrl(result)})`)
+          .setColor('2f3136')
+          .setFooter({ text: "This log will be deleted in 24 hrs!" })
+          .setTimestamp();
 
-            client.channels.cache.get(client.config.logsTicket).send({
-              embeds: [embed]
-            }).catch(() => console.log("Ticket log channel not found."));
-            chan.send('Deleting channel...');
+        client.channels.cache.get(client.config.logsTicket).send({
+          embeds: [embed]
+        }).catch(() => console.log("Ticket log channel not found."));
+        chan.send('Deleting channel...');
 
-            setTimeout(() => {
-              chan.delete();
-            }, 5000);
-          });
+        setTimeout(() => {
+          chan.delete();
+        }, 5000);
+      });
     };
   },
 };
