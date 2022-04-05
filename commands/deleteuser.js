@@ -17,7 +17,7 @@ module.exports = {
 
         if (!interaction.member.roles.cache.find(r => r.id === client.config.roleSupport)) return interaction.reply({ content: "You need to have the <@&" + client.config.roleSupport + "> role.", ephemeral: true })
         try {
-            const req = await axios.post('https://mail.radiant.cool/admin/mail/users/delete',
+            const req = await axios.post('https://mail.radiant.cool/admin/mail/users/remove',
                 new URLSearchParams({
                     "email": email,
                 }),
